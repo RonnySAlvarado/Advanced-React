@@ -1,12 +1,11 @@
 require("dotenv").config();
-
 const createServer = require("./createServer");
 const db = require("./db");
 
 const server = createServer();
 
-// TODO Use express middleware to handle cookies (JWT)
-// TODO Use express middleware to populate current user
+// TODO Use express middlware to handle cookies (JWT)
+// TODO Use express middlware to populate current user
 
 server.start(
   {
@@ -16,6 +15,6 @@ server.start(
     }
   },
   deets => {
-    console.log(`Server is now running in port ${deets.port}`);
+    console.log(`Server is now running on port http://localhost:${deets.port}`);
   }
 );
