@@ -41,6 +41,30 @@ const CreateItem = props => {
     const val = type === "number" ? parseFloat(value) : value;
     setInput({ ...input, [name]: val });
   };
+
+  const uploadFile = async e => {
+    console.log("uploading file...");
+    const files = e.target.files;
+    const data = new FormData();
+    data.append("file", files[0]);
+    data.append("upload_preset", "sickfits"); // This is specific to the presets you set with Cloudinary so make sure the strings match
+
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/anaestheticz/image/upload",
+      {
+        method: "POST",
+        body: data
+      }
+    );
+    const file = await res.json();
+    console.log(file);
+    setInput({
+      ...input,
+      image: file.secure_url,
+      largeImage: file.eager[0].secure_url
+    });
+  };
+
   return (
     <Mutation mutation={CREATE_ITEM_MUTATION} variables={input}>
       {(createItem, { loading, error }) => {
@@ -61,6 +85,20 @@ const CreateItem = props => {
           >
             <Error error={error} />
             <fieldset disabled={loading} aria-busy={loading}>
+              <label htmlFor="file">
+                Image
+                <input
+                  type="file"
+                  id="file"
+                  name="title"
+                  placeholder="Upload an image..."
+                  required
+                  onChange={uploadFile}
+                />
+                {input.image && (
+                  <img width="200" src={input.image} alt="Upload Preview" />
+                )}
+              </label>
               <label htmlFor="title">
                 Title
                 <input
