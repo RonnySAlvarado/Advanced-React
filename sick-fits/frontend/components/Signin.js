@@ -5,13 +5,9 @@ import Form from "./styles/Form";
 import Error from "./ErrorMessage";
 import { CURRENT_USER_QUERY } from "./User";
 
-const SIGNUP_MUTATION = gql`
-  mutation SIGNUP_MUTATION(
-    $email: String!
-    $name: String!
-    $password: String!
-  ) {
-    signup(email: $email, name: $name, password: $password) {
+const SIGNIN_MUTATION = gql`
+  mutation SIGNIN_MUTATION($email: String!, $password: String!) {
+    signin(email: $email, password: $password) {
       id
       email
       name
@@ -19,7 +15,7 @@ const SIGNUP_MUTATION = gql`
   }
 `;
 
-const Signup = props => {
+const Signin = props => {
   const [input, setInput] = useState({
     email: "",
     name: "",
@@ -34,7 +30,7 @@ const Signup = props => {
 
   return (
     <Mutation
-      mutation={SIGNUP_MUTATION}
+      mutation={SIGNIN_MUTATION}
       variables={input}
       refetchQueries={[{ query: CURRENT_USER_QUERY }]}
     >
@@ -49,7 +45,7 @@ const Signup = props => {
             }}
           >
             <fieldset disableed={loading} aria-bus={loading}>
-              <h2>Sign Up for an Account!</h2>
+              <h2>Sign in to your Account!</h2>
               <Error error={error} />
               <label htmlFor="email">
                 Email
@@ -58,16 +54,6 @@ const Signup = props => {
                   name="email"
                   placeholder="email"
                   value={input.email}
-                  onChange={handleChange}
-                />
-              </label>
-              <label htmlFor="name">
-                Name
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="name"
-                  value={input.name}
                   onChange={handleChange}
                 />
               </label>
@@ -81,7 +67,7 @@ const Signup = props => {
                   onChange={handleChange}
                 />
               </label>
-              <button type="submit">Signup</button>
+              <button type="submit">Login</button>
             </fieldset>
           </Form>
         );
@@ -90,4 +76,4 @@ const Signup = props => {
   );
 };
 
-export default Signup;
+export default Signin;
