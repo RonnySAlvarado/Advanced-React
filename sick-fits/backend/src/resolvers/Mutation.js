@@ -7,9 +7,18 @@ const { transport, makeANiceEmail } = require("../mail");
 const Mutations = {
   async createItem(parent, args, ctx, info) {
     // TODO: Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error("You must be logged in to do that!");
+    }
     const item = await ctx.db.mutation.createItem(
       {
         data: {
+          // This is how we create relationships between the Item and the User
+          user: {
+            connect: {
+              id: ctx.request.userId
+            }
+          },
           ...args
         }
       },
@@ -67,6 +76,7 @@ const Mutations = {
     });
     return user;
   },
+
   async signin(parent, { email, password }, ctx, info) {
     // 1. check if there is a user with that email
     const user = await ctx.db.query.user({ where: { email } });
@@ -88,6 +98,7 @@ const Mutations = {
     // 5. Return the user
     return user;
   },
+
   signout(parent, args, ctx, info) {
     ctx.response.clearCookie("token");
     return { message: "You are now logged out." };
