@@ -55,7 +55,7 @@ const Reset = props => {
               setInput({ ...input, password: "", confirmPassword: "" });
             }}
           >
-            <fieldset disableed={loading} aria-bus={loading}>
+            <fieldset disabled={loading} aria-bus={loading}>
               <h2>Reset Your Password</h2>
               <Error error={error} />
               <label htmlFor="password">
